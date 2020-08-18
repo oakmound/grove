@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" width="30" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" name="base-tiles" tilewidth="16" tileheight="16" tilecount="36" columns="6">
+  <image source="../images/raw/baseTiles.png" trans="ff00ff" width="96" height="96"/>
+ </tileset>
+ <tileset firstgid="37" name="dupe-file-diffsize" tilewidth="32" tileheight="32" tilecount="9" columns="3">
+  <image source="../images/raw/baseTiles.png" trans="ff00ff" width="96" height="96"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="30" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztk00KhDAMRjM4oLPSlRtP0PtfcFxMMZRA89dmFhEeKrZ9zZd6AcAVxEZAXdQ4DdW73pw3x+9Z6n01cL0n8mrqbb09f/UeCI8cud5aL2fNFZ5eWPsrmWN1ar0eUN4S5O1RHPb2LznPyBh7C/LO7C92SbzaPWIvZiPeR/aXqme2tzR3a7aSekefq/QC7J257wb8bUFYvIsCj3o/CiJytva35x51niO9Ejd3LOf/5ay1g2yPXC8Hz5xHkd70pje9Wm8EXymQMlE=
+  </data>
+ </layer>
+ <layer id="4" name="Tile Layer 4" width="30" height="40" opacity="0.5">
+  <data encoding="base64" compression="zlib">
+   eJztz7EJADAIRUEncIHsv2dSC+kSbe7gg93DCCbl2Rrq5kCvrrvfKS/372btdv8NAAAAr22xxAEK
+  </data>
+ </layer>
+ <layer id="2" name="Top of the morning" width="30" height="40">
+  <properties>
+   <property name="collision" value="lava,blocker"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzUENAAAIA7GJwL9WDEwACW1y70tumZIvAAAAwF8LziwBLQ==
+  </data>
+ </layer>
+ <layer id="3" name="invisilin" width="30" height="40" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6GzUP9mZ2MPSFg1VVVVVX36AO/lT7E=
+  </data>
+ </layer>
+</map>

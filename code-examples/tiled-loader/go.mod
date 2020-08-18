@@ -1,4 +1,4 @@
-module github.com/implausiblyfun/oakgrove/code-examples/tiled-loader
+module github.com/oakmound/oakgrove/code-examples/tiled-loader
 
 go 1.13
 

@@ -1,17 +1,21 @@
 package main
 
 import (
+	"image/color"
 	"path/filepath"
 
-	"github.com/implausiblyfun/oakgrove/code-examples/tiled-loader/maps"
+	"github.com/oakmound/oak/key"
 	oak "github.com/oakmound/oak/v2"
 	"github.com/oakmound/oak/v2/dlog"
 	"github.com/oakmound/oak/v2/entities"
 	"github.com/oakmound/oak/v2/entities/x/move"
+	"github.com/oakmound/oak/v2/event"
 	"github.com/oakmound/oak/v2/physics"
 	"github.com/oakmound/oak/v2/render"
 	"github.com/oakmound/oak/v2/render/mod"
 	"github.com/oakmound/oak/v2/scene"
+
+	"github.com/oakmound/oakgrove/code-examples/tiled-loader/maps"
 )
 
 // just for fun set the name of the example for pathing.
@@ -32,13 +36,28 @@ func main() {
 
 		// Get the map info.
 		// Given that this is an example we will reload from file each time the scene starts.
-		ourMap := filepath.Join(oak.SetupConfig.Assets.AssetPath, "maps", "map1.tmx")
+		ourMap := filepath.Join(oak.SetupConfig.Assets.AssetPath, "maps", "map2.tmx")
 		_, info, err := maps.LoadLevelFromTMX(ourMap)
 		if err != nil {
 			panic(err.Error())
 		}
 		dlog.Info("Sizing is ", info.Width*info.TileWidth, info.Height)
 		oak.SetViewportBounds(0, 0, info.Width*info.TileWidth, info.Height*info.TileHeight)
+
+		overlay := render.NewEmptySprite(0, 0, info.Width*info.TileWidth, info.Height*info.TileHeight)
+		rColor := color.RGBA{151, 46, 46, 255}
+		for x := 1; x < info.Height; x++ {
+			render.DrawLine(overlay.GetRGBA(),
+				x*info.TileWidth, 0,
+				x*info.TileWidth, info.Height*info.TileHeight,
+				rColor)
+		}
+		for y := 1; y < info.Width; y++ {
+			render.DrawLine(overlay.GetRGBA(),
+				0, y*info.TileHeight,
+				info.Width*info.TileWidth, y*info.TileHeight,
+				rColor)
+		}
 
 		// Load a sheet to draw our character from. Art thanks to Fenrir!
 		pSheet, err := render.GetSheet(filepath.Join("", "16x32", "droid_1_sheet.png"))
@@ -88,7 +107,22 @@ func main() {
 			)
 			return 0
 		}, "EnterFrame")
-		render.Draw(char.R, 2, 2)
+		render.Draw(char.R, 2, 4)
+
+		var overlayToggle bool
+		event.GlobalBind(
+			func(int, interface{}) int {
+
+				if overlayToggle {
+					overlayToggle = false
+					overlay.Undraw()
+					return 0
+				}
+				overlayToggle = true
+				render.Draw(overlay, 2, 3, 3)
+				return 0
+			},
+			key.Down+key.ReturnEnter)
 
 	}, func() bool {
 		return true

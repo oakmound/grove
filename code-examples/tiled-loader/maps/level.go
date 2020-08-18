@@ -112,7 +112,9 @@ func LoadLevelFromTMX(fileToLoad string) (levelPointer *Level, tmxMap *tiled.Map
 
 				// We would copy but subsprite is a bad method that dont cache
 				l[z][x][y].AssignRenderable(tImg)
-				l[z][x][y].ShiftPos(float64(x*gameMap.TileWidth), float64(y*gameMap.TileHeight)).SetLayer(((z + 1) * 1)) // for now its just overlay on the z layer bu't thats simplistic.
+				// Set layer as negative to represent the same way as tiled does.
+				// Note that if a tile is set in tmx and it is larger than the tile width then this approximates the tiled implementation sorta close.
+				l[z][x][y].ShiftPos(float64(x*gameMap.TileWidth), float64(y*gameMap.TileHeight)).SetLayer(z*10 + (-x - y*2)) // for now its just overlay on the z layer bu't thats simplistic.
 
 				l[z][x][y].Draw()
 			}

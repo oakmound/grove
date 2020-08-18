@@ -8,7 +8,7 @@ import (
 	// "github.com/lafriks/go-tiled/render"
 )
 
-const mapPath = "../../assets/tiled-loader/maps/map1.tmx" // Path to your Tiled Map.
+const mapPath = "../../assets/tiled-loader/maps/map2.tmx" // Path to your Tiled Map.
 
 func Load() error {
 	// Parse .tmx file.

@@ -11,7 +11,7 @@ type Basic struct {
 
 func (bt *Basic) Draw() error {
 	if !bt.IsNil() {
-		render.Draw(bt.r, 2, bt.r.GetLayer())
+		render.Draw(bt.r, 1, bt.r.GetLayer())
 	}
 	return nil
 }
