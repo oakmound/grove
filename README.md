@@ -1,9 +1,13 @@
-# oakgrove
-Placeholder for [oak](https://github.com/oakmoundstudio/oak) examples that may have dependencies/assets that would bloat the oak package.
+# Grove
 
-# contributing 
+Grove is a grab-bag of extended components, examples, and utilities for developing programs with [Oak](https://www.github.com/oakmound/oak).
+
+## Contributing
+
 See contributing.md for specifics but pretty much all contributions are welcomed happily.
 
-# licensing
+## Licensing
+
 To illustrate what can be done in oak in a positive light this repository includes art for the examples.
-To be able to use certain art it was placed under [a different path](assets/) with a corresponding slightly less permissive license.
+
+Assets in this repository are covered by the license defined within the assets directory. Code in this repository is covered by the top level license file.
