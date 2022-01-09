@@ -15,12 +15,12 @@ import (
 
 var _ render.Modifiable = &Switch{}
 
-// The Switch type is a duplicate of oak's string switch type with int-keys
-// instead of string-keys. Consider using it with bitflags!
+// The Switch type will display one of a set of modifiable sub-components,
+// keyed on integers. Consider using it with bitflags.
 type Switch struct {
 	render.LayeredPoint
 	subRenderables map[int]render.Modifiable
-	curRenderable  int
+	Index  int
 	lock           sync.RWMutex
 }
 
@@ -29,7 +29,7 @@ func New(start int, m map[int]render.Modifiable) *Switch {
 	return &Switch{
 		LayeredPoint:   render.NewLayeredPoint(0, 0, 0),
 		subRenderables: m,
-		curRenderable:  start,
+		Index:  start,
 		lock:           sync.RWMutex{},
 	}
 }
@@ -57,7 +57,7 @@ func (c *Switch) Set(k int) error {
 		return oakerr.NotFound{InputName: "k:" + strconv.Itoa(k)}
 	}
 	c.lock.RUnlock()
-	c.curRenderable = k
+	c.Index = k
 	return nil
 }
 
@@ -71,7 +71,7 @@ func (c *Switch) GetSub(s int) render.Modifiable {
 
 // Get returns the Switch's current key
 func (c *Switch) Get() int {
-	return c.curRenderable
+	return c.Index
 }
 
 // SetOffsets sets the logical offset for the specified key
@@ -94,7 +94,7 @@ func (c *Switch) Copy() render.Modifiable {
 	}
 	c.lock.RUnlock()
 	newC.subRenderables = newSubRenderables
-	newC.curRenderable = c.curRenderable
+	newC.Index = c.Index
 	newC.lock = sync.RWMutex{}
 	return newC
 }
@@ -102,7 +102,7 @@ func (c *Switch) Copy() render.Modifiable {
 //GetRGBA returns the current renderables rgba
 func (c *Switch) GetRGBA() *image.RGBA {
 	c.lock.RLock()
-	rgba := c.subRenderables[c.curRenderable].GetRGBA()
+	rgba := c.subRenderables[c.Index].GetRGBA()
 	c.lock.RUnlock()
 	return rgba
 }
@@ -129,7 +129,7 @@ func (c *Switch) Filter(fs ...mod.Filter) {
 //Draw draws the Switch at an offset from its logical location
 func (c *Switch) Draw(buff draw.Image, xOff float64, yOff float64) {
 	c.lock.RLock()
-	c.subRenderables[c.curRenderable].Draw(buff, c.X()+xOff, c.Y()+yOff)
+	c.subRenderables[c.Index].Draw(buff, c.X()+xOff, c.Y()+yOff)
 	c.lock.RUnlock()
 }
 
@@ -141,7 +141,7 @@ func (c *Switch) ShiftPos(x, y float64) {
 // GetDims gets the current Renderables dimensions
 func (c *Switch) GetDims() (int, int) {
 	c.lock.RLock()
-	w, h := c.subRenderables[c.curRenderable].GetDims()
+	w, h := c.subRenderables[c.Index].GetDims()
 	c.lock.RUnlock()
 	return w, h
 }
@@ -149,7 +149,7 @@ func (c *Switch) GetDims() (int, int) {
 // Pause stops the current Renderable if possible
 func (c *Switch) Pause() {
 	c.lock.RLock()
-	if cp, ok := c.subRenderables[c.curRenderable].(render.CanPause); ok {
+	if cp, ok := c.subRenderables[c.Index].(render.CanPause); ok {
 		cp.Pause()
 	}
 	c.lock.RUnlock()
@@ -158,7 +158,7 @@ func (c *Switch) Pause() {
 // Unpause tries to unpause the current Renderable if possible
 func (c *Switch) Unpause() {
 	c.lock.RLock()
-	if cp, ok := c.subRenderables[c.curRenderable].(render.CanPause); ok {
+	if cp, ok := c.subRenderables[c.Index].(render.CanPause); ok {
 		cp.Unpause()
 	}
 	c.lock.RUnlock()
@@ -168,7 +168,7 @@ func (c *Switch) Unpause() {
 func (c *Switch) IsInterruptable() bool {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
-	if i, ok := c.subRenderables[c.curRenderable].(render.NonInterruptable); ok {
+	if i, ok := c.subRenderables[c.Index].(render.NonInterruptable); ok {
 		return i.IsInterruptable()
 	}
 	return true
@@ -178,7 +178,7 @@ func (c *Switch) IsInterruptable() bool {
 func (c *Switch) IsStatic() bool {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
-	if s, ok := c.subRenderables[c.curRenderable].(render.NonStatic); ok {
+	if s, ok := c.subRenderables[c.Index].(render.NonStatic); ok {
 		return s.IsStatic()
 	}
 	return true
