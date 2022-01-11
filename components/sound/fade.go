@@ -7,8 +7,10 @@ import (
 
 const fadeLoopTime = 20 * time.Millisecond
 
+// MusicFader exposes a Fader for usage on Music.
 var MusicFader = Fader{}
 
+// Fader is a safe way to fade in our out Music.
 type Fader struct {
 	sync.Mutex
 
@@ -18,6 +20,7 @@ type Fader struct {
 	runTil    time.Time
 }
 
+// FadeOut the Music over the given time.
 func (f *Fader) FadeOut(duration time.Duration) {
 	f.Lock()
 	if f.fadeTo == musicVolume && f.fadeTo == 0 {
@@ -33,6 +36,7 @@ func (f *Fader) FadeOut(duration time.Duration) {
 	f.startFade(duration)
 }
 
+// FadeIn the Music over the given time.
 func (f *Fader) FadeIn(duration time.Duration) {
 	f.Lock()
 	if f.fadeTo == f.fadedFrom {

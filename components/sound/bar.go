@@ -14,14 +14,17 @@ import (
 	"golang.org/x/image/colornames"
 )
 
+// BarKind details which type of volume should be manipulated by the bar
 type BarKind int
 
+// Types of bars.
 const (
 	BarKindMaster BarKind = iota
 	BarKindMusic  BarKind = iota
 	BarKindSFX    BarKind = iota
 )
 
+// NewBar for setting of the sound graphically.
 func NewBar(kind BarKind, pos floatgeom.Point2, w, h int) *entities.Solid {
 
 	dl := &DashedLine{
@@ -67,6 +70,7 @@ func NewBar(kind BarKind, pos floatgeom.Point2, w, h int) *entities.Solid {
 	return solid
 }
 
+// DashedLine to display the current value on the bar.
 type DashedLine struct {
 	render.LayeredPoint
 	Dims     intgeom.Point2
@@ -76,10 +80,12 @@ type DashedLine struct {
 	Progress float64
 }
 
+// GetDims for the line.
 func (dl *DashedLine) GetDims() (int, int) {
 	return dl.Dims.X(), dl.Dims.Y()
 }
 
+// Draw the dashed line.
 func (dl *DashedLine) Draw(buff draw.Image, xOff, yOff float64) {
 	shouldDash := false
 	wf := float64(dl.Dims.X())

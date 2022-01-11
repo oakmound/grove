@@ -10,18 +10,22 @@ import (
 )
 
 var (
+	// Musics is a mapping of music files with an Audio to play.
 	Musics = map[string]*audio.Audio{}
 
 	musicFileLock sync.RWMutex
 	musicFiles    = map[string]*font.Font{}
 )
 
+// RegisterMusic and make it ready for playback.
+// Specify the file to load it from and the music font to use with it.
 func RegisterMusic(file string, f *font.Font) {
 	musicFileLock.Lock()
 	musicFiles[file] = f
 	musicFileLock.Unlock()
 }
 
+// ReloadMusicAssets and error if the reload from files fails somehow.
 func ReloadMusicAssets() error {
 	musicFileLock.Lock()
 	defer musicFileLock.Unlock()
@@ -32,14 +36,15 @@ func ReloadMusicAssets() error {
 		}
 		Musics[s] = audio.New(f, a)
 	}
-	return nil 
+	return nil
 }
 
+// PlayMusic stops any playing music and then tries to play the specified music file.
 func PlayMusic(s string) error {
-	StopMusic()
 	if PlayingMusicLabel == s {
 		return nil
 	}
+	StopMusic()
 	PlayingMusicLabel = s
 	audOrigin, ok := Musics[s]
 	if !ok {
@@ -50,6 +55,7 @@ func PlayMusic(s string) error {
 	return nil
 }
 
+// StopMusic if any music is playing.
 func StopMusic() {
 	if PlayingMusic != nil {
 		PlayingMusic.Stop()
@@ -57,9 +63,14 @@ func StopMusic() {
 }
 
 // only one music can be playing
+
+// PlayingMusic is the currently playing audio.
 var PlayingMusic *audio.Audio
+
+// PlayingMusicLabel is the playing music's string name.
 var PlayingMusicLabel string
 
+// SetMusicVolume to the provided value.
 func SetMusicVolume(newVolume float64) {
 	musicVolume = newVolume
 	updateMusicVolume(volume, musicVolume)

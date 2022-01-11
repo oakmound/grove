@@ -46,6 +46,7 @@ func convertVolumeScale(volumeScale float64) int32 {
 	return int32(volumeScale)
 }
 
+// SetMasterVolume value and update all volume values based of the given value.
 func SetMasterVolume(masterVolume float64) {
 	volume = masterVolume
 	updateSFXVolume(volume, sfxVolume)
