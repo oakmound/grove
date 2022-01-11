@@ -39,13 +39,13 @@ func NewBar(kind BarKind, pos floatgeom.Point2, w, h int) *entities.Solid {
 	var eventName string
 	switch kind {
 	case BarKindMaster:
-		eventName = "MasterVolumeChanged"
+		eventName = EventMasterVolumeChanged
 		dl.Progress = volume
 	case BarKindMusic:
-		eventName = "MusicVolumeChanged"
+		eventName = EventMusicVolumeChanged
 		dl.Progress = musicVolume
 	case BarKindSFX:
-		eventName = "SFXVolumeChanged"
+		eventName = EventSFXVolumeChanged
 		dl.Progress = sfxVolume
 	}
 	solid.CID.Bind(eventName, func(id event.CID, payload interface{}) int {

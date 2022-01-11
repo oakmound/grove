@@ -16,14 +16,14 @@ var initOnce sync.Once
 
 // Init loads assets and initializes volume levels. It will do nothing
 // after it has been called once.
-func Init(masterVolume, musicVolume, sfxVolume float64) {
+func Init(masterVolume, mVolume, sVolume float64) {
 	initOnce.Do(func() {
 		ReloadMusicAssets()
 		ReloadSFXAssets()
 
 		volume = masterVolume
-		musicVolume = musicVolume
-		sfxVolume = sfxVolume
+		musicVolume = mVolume
+		sfxVolume = sVolume
 
 		updateSFXVolume(volume, sfxVolume)
 		updateMusicVolume(volume, musicVolume)
