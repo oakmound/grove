@@ -1,20 +1,19 @@
 package keyhint
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"math"
 
-	"github.com/oakmound/oak/v3/alg/intgeom"
-	"github.com/oakmound/oak/v3/entities/x/btn"
-	"github.com/oakmound/oak/v3/entities/x/mods"
-	"github.com/oakmound/oak/v3/render"
+	"github.com/oakmound/oak/v4/alg/intgeom"
+	"github.com/oakmound/oak/v4/entities/x/btn"
+	"github.com/oakmound/oak/v4/entities/x/mods"
+	"github.com/oakmound/oak/v4/render"
 )
 
-// A KeyHint is a small, colored renderable displaying some text. The text 
+// A KeyHint is a small, colored renderable displaying some text. The text
 // is designed to be a key 'A,B,C,D' or controller button 'A,B,X,Y', and intended
-// for use as a hint to imply that pressing that key or button will trigger something. 
+// for use as a hint to imply that pressing that key or button will trigger something.
 type KeyHint struct {
 	Options
 	render.Renderable

@@ -1,4 +1,4 @@
-package sound
+package sound4
 
 import (
 	"sync"
@@ -18,8 +18,8 @@ var initOnce sync.Once
 // after it has been called once.
 func Init(masterVolume, mVolume, sVolume float64) {
 	initOnce.Do(func() {
-		ReloadMusicAssets()
-		ReloadSFXAssets()
+		// ReloadMusicAssets()
+		// ReloadSFXAssets()
 
 		volume = masterVolume
 		musicVolume = mVolume
@@ -47,9 +47,10 @@ func convertVolumeScale(volumeScale float64) int32 {
 }
 
 // SetMasterVolume value and update all volume values based of the given value.
-func SetMasterVolume(masterVolume float64) {
+func SetMasterVolume(eh event.Handler, masterVolume float64) {
 	volume = masterVolume
-	updateSFXVolume(volume, sfxVolume)
-	updateMusicVolume(volume, musicVolume)
-	event.Trigger(EventMasterVolumeChanged, volume)
+	// updateSFXVolume(volume, sfxVolume)
+	// updateMusicVolume(volume, musicVolume)
+	// event.Trigger(EventMasterVolumeChanged, volume)
+	event.TriggerOn(eh, EventVolumeChange, VolumeChangePayload{Kind: KindMaster, NewVolume: volume})
 }

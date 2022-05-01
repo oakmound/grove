@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/oakmound/oak/v3/audio"
-	"github.com/oakmound/oak/v3/audio/font"
-	"github.com/oakmound/oak/v3/event"
+	"github.com/oakmound/oak/v4/audio"
+	"github.com/oakmound/oak/v4/audio/font"
+	"github.com/oakmound/oak/v4/event"
 )
 
 var (

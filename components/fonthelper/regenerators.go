@@ -4,7 +4,7 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/oakmound/oak/v3/render"
+	"github.com/oakmound/oak/v4/render"
 )
 
 // WithSize sets size on a font

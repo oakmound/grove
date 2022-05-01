@@ -2,7 +2,7 @@ module github.com/oakmound/grove/components/textfit
 
 go 1.17
 
-require github.com/oakmound/oak/v3 v3.2.2
+require github.com/oakmound/oak/v4 v3.2.2
 
 require (
 	github.com/disintegration/gift v1.2.0 // indirect

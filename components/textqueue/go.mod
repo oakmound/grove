@@ -3,7 +3,7 @@ module github.com/oakmound/grove/components/textqueue
 go 1.18
 
 require (
-	github.com/oakmound/oak/v3 v3.2.2
+	github.com/oakmound/oak/v4 v4.0.0-alpha.2
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410
 )
 
