@@ -3,8 +3,8 @@ package textfit
 import (
 	"testing"
 
-	"github.com/oakmound/oak/v3/alg/floatgeom"
-	"github.com/oakmound/oak/v3/render"
+	"github.com/oakmound/oak/v4/alg/floatgeom"
+	"github.com/oakmound/oak/v4/render"
 )
 
 func TestNew(t *testing.T) {

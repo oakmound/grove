@@ -6,14 +6,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/oakmound/oak/v3/alg/floatgeom"
-	"github.com/oakmound/oak/v3/dlog"
+	"github.com/oakmound/oak/v4/alg/floatgeom"
+	"github.com/oakmound/oak/v4/dlog"
 
-	// "github.com/oakmound/oak/v3/entities/x/mods"
-	"github.com/oakmound/oak/v3/event"
-	"github.com/oakmound/oak/v3/render"
-	"github.com/oakmound/oak/v3/render/mod"
-	"github.com/oakmound/oak/v3/scene"
+	"github.com/oakmound/oak/v4/event"
+	"github.com/oakmound/oak/v4/render"
+	"github.com/oakmound/oak/v4/render/mod"
+	"github.com/oakmound/oak/v4/scene"
 	"golang.org/x/image/colornames"
 )
 
@@ -47,47 +46,48 @@ func (tq *TextQueue) CID() event.CallerID {
 // New creates a customized TextQueue.
 func New(ctx *scene.Context, registeredEvents []event.UnsafeEventID, pos floatgeom.Point2, layer int, font *render.Font, sustainTime time.Duration) *TextQueue {
 	tq := &TextQueue{}
+	tq.CallerID = ctx.Register(tq)
 
 	tq.LayeredPoint = render.NewLayeredPoint(pos.X(), pos.Y(), layer)
 	tq.font = font
 	tq.queue = make([]queueItem, 0)
 	tq.sustainTime = sustainTime
 
-	bindFn := func(tq *TextQueue, str string) event.Response {
-		r := tq.font.NewText(str, 0, 0)
-		m := r.ToSprite().Modify(mod.HighlightOff(colornames.Black, 2, 1, 1))
-		tq.queueLock.Lock()
-		tq.queue = append([]queueItem{{
-			mod:    m,
-			dropAt: time.Now().Add(tq.sustainTime),
-		}}, tq.queue...)
-		tq.queueLock.Unlock()
-		return 0
-	}
-
-	event.Bind(ctx, TextQueuePublish, tq, bindFn)
+	event.Bind(ctx, TextQueuePublish, tq, PrintBind)
 
 	if len(registeredEvents) == 0 {
 		return tq
 	}
 
-	unsafeBindFn := func(id event.CallerID, handler event.Handler, payload interface{}) event.Response {
+	unsafePrintBind := func(id event.CallerID, handler event.Handler, payload interface{}) event.Response {
 		ent := handler.GetCallerMap().GetEntity(id)
-		tq, ok := ent.(*TextQueue)
-		if !ok {
+		_, ok := ent.(*TextQueue)
+		if !ok && ent != nil {
 			dlog.Error("expected TextQueue, got " + fmt.Sprintf("%T", ent))
 			return 1
 		}
-		bindFn(tq, fmt.Sprintf("%v", payload))
+		PrintBind(tq, fmt.Sprintf("%v", payload))
 
 		return 0
 	}
 
 	for _, re := range registeredEvents {
-		ctx.UnsafeBind(re, tq.CID(), unsafeBindFn)
+		ctx.UnsafeBind(re, tq.CID(), unsafePrintBind)
 	}
 
 	return tq
+}
+
+func PrintBind(tq *TextQueue, str string) event.Response {
+	r := tq.font.NewText(str, 0, 0)
+	m := r.ToSprite().Modify(mod.HighlightOff(colornames.Black, 2, 1, 1))
+	tq.queueLock.Lock()
+	tq.queue = append([]queueItem{{
+		mod:    m,
+		dropAt: time.Now().Add(tq.sustainTime),
+	}}, tq.queue...)
+	tq.queueLock.Unlock()
+	return 0
 }
 
 const DisplayTextEvent = "DisplayText"

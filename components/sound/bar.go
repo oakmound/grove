@@ -1,31 +1,30 @@
 package sound
 
 import (
-	"fmt"
 	"image/color"
 	"image/draw"
 
-	"github.com/oakmound/oak/v3/alg/floatgeom"
-	"github.com/oakmound/oak/v3/alg/intgeom"
-	"github.com/oakmound/oak/v3/entities"
-	"github.com/oakmound/oak/v3/event"
-	"github.com/oakmound/oak/v3/mouse"
-	"github.com/oakmound/oak/v3/render"
+	"github.com/oakmound/oak/v4/alg/floatgeom"
+	"github.com/oakmound/oak/v4/alg/intgeom"
+	"github.com/oakmound/oak/v4/entities"
+	"github.com/oakmound/oak/v4/event"
+	"github.com/oakmound/oak/v4/render"
+	"github.com/oakmound/oak/v4/scene"
 	"golang.org/x/image/colornames"
 )
 
-// BarKind details which type of volume should be manipulated by the bar
-type BarKind int
+// VolumeKind details which type of volume should be manipulated by the bar
+type VolumeKind int
 
 // Types of bars.
 const (
-	BarKindMaster BarKind = iota
-	BarKindMusic  BarKind = iota
-	BarKindSFX    BarKind = iota
+	KindMaster VolumeKind = iota
+	KindMusic  VolumeKind = iota
+	KindSFX    VolumeKind = iota
 )
 
 // NewBar for setting of the sound graphically.
-func NewBar(kind BarKind, pos floatgeom.Point2, w, h int) *entities.Solid {
+func NewBar(ctx *scene.Context, kind VolumeKind, pos floatgeom.Point2, w, h int) *entities.Entity {
 
 	dl := &DashedLine{
 		LayeredPoint: render.NewLayeredPoint(pos.X(), pos.Y(), 0),
@@ -35,38 +34,34 @@ func NewBar(kind BarKind, pos floatgeom.Point2, w, h int) *entities.Solid {
 		DashMod:      4,
 		Progress:     0,
 	}
-	solid := entities.NewSolid(pos.X(), pos.Y(), float64(w), float64(h), dl, mouse.DefaultTree, 0)
-	var eventName string
+
+	solid := entities.New(ctx,
+		entities.WithRenderable(dl),
+		entities.WithRect(floatgeom.NewRect2WH(pos.X(), pos.Y(), 32, 32)),
+	)
+
+	// solid := entities.NewSolid(pos.X(), pos.Y(), float64(w), float64(h), dl, mouse.DefaultTree, 0)
+	// var eventName string
 	switch kind {
-	case BarKindMaster:
-		eventName = EventMasterVolumeChanged
+	case KindMaster:
+		// eventName = EventMasterVolumeChanged
 		dl.Progress = volume
-	case BarKindMusic:
-		eventName = EventMusicVolumeChanged
+	case KindMusic:
+		// eventName = EventMusicVolumeChanged
 		dl.Progress = musicVolume
-	case BarKindSFX:
-		eventName = EventSFXVolumeChanged
+	case KindSFX:
+		// eventName = EventSFXVolumeChanged
 		dl.Progress = sfxVolume
 	}
-	solid.CID.Bind(eventName, func(id event.CID, payload interface{}) int {
-		newVal, ok := payload.(float64)
-		if !ok {
-			fmt.Println("expected float progress arg to bar change binding")
+
+	event.Bind(ctx, EventVolumeChange, solid, func(bar *entities.Entity, change VolumeChangePayload) event.Response {
+		if change.Kind != kind {
 			return 0
 		}
-		solid, ok := event.GetEntity(id).(*entities.Solid)
-		if !ok {
-			fmt.Println("expected doodad entity in bar change binding")
-			return 0
-		}
-		dl, ok := solid.R.(*DashedLine)
-		if !ok {
-			fmt.Println("expected renderable as DashedLine in bar change binding")
-			return 0
-		}
-		dl.Progress = newVal
+		dl.Progress = change.NewVolume
 		return 0
 	})
+
 	return solid
 }
 

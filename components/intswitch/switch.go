@@ -3,14 +3,14 @@ package intswitch
 import (
 	"image"
 	"image/draw"
-	"sync"
 	"strconv"
+	"sync"
 
-	"github.com/oakmound/oak/v3/event"
-	"github.com/oakmound/oak/v3/oakerr"
-	"github.com/oakmound/oak/v3/physics"
-	"github.com/oakmound/oak/v3/render"
-	"github.com/oakmound/oak/v3/render/mod"
+	"github.com/oakmound/oak/v4/event"
+	"github.com/oakmound/oak/v4/oakerr"
+	"github.com/oakmound/oak/v4/physics"
+	"github.com/oakmound/oak/v4/render"
+	"github.com/oakmound/oak/v4/render/mod"
 )
 
 var _ render.Modifiable = &Switch{}
@@ -20,7 +20,7 @@ var _ render.Modifiable = &Switch{}
 type Switch struct {
 	render.LayeredPoint
 	subRenderables map[int]render.Modifiable
-	Index  int
+	Index          int
 	lock           sync.RWMutex
 }
 
@@ -29,7 +29,7 @@ func New(start int, m map[int]render.Modifiable) *Switch {
 	return &Switch{
 		LayeredPoint:   render.NewLayeredPoint(0, 0, 0),
 		subRenderables: m,
-		Index:  start,
+		Index:          start,
 		lock:           sync.RWMutex{},
 	}
 }
