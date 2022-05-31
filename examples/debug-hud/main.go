@@ -9,6 +9,7 @@ import (
 	"github.com/oakmound/grove/components/keyhint"
 	"github.com/oakmound/grove/components/sound"
 	"github.com/oakmound/grove/components/textfit"
+	"github.com/oakmound/grove/components/textinput"
 	"github.com/oakmound/grove/components/textqueue"
 	"golang.org/x/image/colornames"
 
@@ -94,6 +95,9 @@ func main() {
 			entities.WithRenderable(wrappedText),
 			entities.WithDrawLayers([]int{1, 2}),
 		)
+
+		textinput.New(ctx)
+		// , textinput.WithPos(basePos.X(), basePos.Y()+300))
 
 	}})
 
