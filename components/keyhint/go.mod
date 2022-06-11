@@ -2,7 +2,7 @@ module github.com/oakmound/grove/components/keyhint
 
 go 1.17
 
-require github.com/oakmound/oak/v4 v4.0.1
+require github.com/oakmound/oak/v4 v4.0.2
 
 require (
 	github.com/disintegration/gift v1.2.1 // indirect

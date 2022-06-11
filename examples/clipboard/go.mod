@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/atotto/clipboard v0.1.4
-	github.com/oakmound/oak/v4 v4.0.1
+	github.com/oakmound/oak/v4 v4.0.2
 )
 
 require (

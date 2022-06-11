@@ -3,7 +3,7 @@ module github.com/oakmound/grove/examples/slide
 go 1.18
 
 require (
-	github.com/oakmound/oak/v4 v4.0.1
+	github.com/oakmound/oak/v4 v4.0.2
 	golang.org/x/image v0.0.0-20220413100746-70e8d0d3baa9
 )
 

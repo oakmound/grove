@@ -16,8 +16,8 @@ github.com/jezek/xgb v1.0.0/go.mod h1:nrhwO0FX/enq75I7Y7G8iN1ubpSGZEiA3v9e9GyRFl
 github.com/jfreymuth/pulse v0.1.0/go.mod h1:cpYspI6YljhkUf1WLXLLDmeaaPFc3CnGLjDZf9dZ4no=
 github.com/oakmound/alsa v0.0.2/go.mod h1:wx+ehwqFnNL7foTwxxu2bKQlaUmD2oXd4ka1UBSgWAo=
 github.com/oakmound/libudev v0.2.1/go.mod h1:zYF5CkHY+UP6lzWbPR+XoVAscl/s+OncWA//qWjMLUs=
-github.com/oakmound/oak/v4 v4.0.0 h1:wnuX7nt3PjPs3V2ZT64T4wyAQF8e0D5CVElI33EDsTY=
-github.com/oakmound/oak/v4 v4.0.0/go.mod h1:cRP/m5P4ptLwx9NgD11HwLyCWEUCBC6tu7hHRh3/kUM=
+github.com/oakmound/oak/v4 v4.0.2 h1:8MKAZ7XQdeseqWeGdTEUE4uoIH8ogzq9R76tIWZYTys=
+github.com/oakmound/oak/v4 v4.0.2/go.mod h1:cRP/m5P4ptLwx9NgD11HwLyCWEUCBC6tu7hHRh3/kUM=
 github.com/oakmound/w32 v2.1.0+incompatible/go.mod h1:lzloWlclSXIU4cDr67WF8qjFFDO8gHHBIk4Qqe90enQ=
 github.com/oov/directsound-go v0.0.0-20141101201356-e53e59c700bf/go.mod h1:RBXkZ8n2vvtdJP6PO+TbU/N/DVuCDwUN53CU+C1pJOs=
 github.com/yuin/goldmark v1.4.0/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
