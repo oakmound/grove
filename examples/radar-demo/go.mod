@@ -3,7 +3,7 @@ module github.com/oakmound/grove/examples/radar-demo
 go 1.18
 
 require (
-	github.com/oakmound/grove/components/radar v0.0.0-20220111021726-41ed3856c8b7
+	github.com/oakmound/grove/components/radar v0.0.0-20220611164817-eef6f0c2a13a
 	github.com/oakmound/oak/v4 v4.0.2
 )
 
@@ -17,7 +17,6 @@ require (
 	github.com/jfreymuth/pulse v0.1.0 // indirect
 	github.com/oakmound/alsa v0.0.2 // indirect
 	github.com/oakmound/libudev v0.2.1 // indirect
-	github.com/oakmound/oak/v3 v3.2.2 // indirect
 	github.com/oakmound/w32 v2.1.0+incompatible // indirect
 	github.com/oov/directsound-go v0.0.0-20141101201356-e53e59c700bf // indirect
 	golang.org/x/exp v0.0.0-20220414153411-bcd21879b8fd // indirect
