@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/oakmound/oak/v4/alg/floatgeom"
-	"github.com/oakmound/oak/v4/entities"
 	"github.com/oakmound/oak/v4/render"
 )
 
@@ -43,9 +42,10 @@ func WithPlaceholder(s string) Option {
 	}
 }
 
-func WithPos(x, y float64) Option {
+func WithPosition(x, y float64) Option {
 	return func(t *TextInput) {
-		t.position = floatgeom.Point2{x, y}
+		t.x = x
+		t.y = y
 	}
 }
 
@@ -101,11 +101,5 @@ func WithOnEdit(onEdit func(*TextInput)) Option {
 func WithBlinkerLayers(layers ...int) Option {
 	return func(t *TextInput) {
 		t.blinkerLayers = layers
-	}
-}
-
-func WithEntityOptions(opts ...entities.Option) Option {
-	return func(t *TextInput) {
-		t.entityOptions = opts
 	}
 }

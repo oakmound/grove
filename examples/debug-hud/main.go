@@ -69,7 +69,7 @@ func main() {
 		kFnt, _ := render.DefFontGenerator.RegenerateWith(
 			fonthelper.WithSizeAndColor(15, colornames.Orange))
 		keyQueue := textqueue.New(
-			ctx, []event.UnsafeEventID{key.AnyDown.UnsafeEventID},
+			ctx, []event.UnsafeEventID{key.AnyDown.UnsafeEventID, mouse.Press.UnsafeEventID},
 			floatgeom.Point2{50, 50}, 0,
 			kFnt, 4*time.Second,
 		)
@@ -100,10 +100,12 @@ func main() {
 		)
 
 		textinput.New(ctx,
-			textinput.WithPos(basePos.X(), basePos.Y()+100),
+			textinput.WithPosition(basePos.X(), basePos.Y()+100),
 			textinput.WithDims(200, 22),
 			textinput.WithStr("Input example"),
-			textinput.WithEntityOptions(entities.WithDrawLayers([]int{1, 2})))
+			textinput.WithFont(wrapFnt),
+			textinput.WithBlinkRate(time.Second),
+		)
 
 	}})
 
