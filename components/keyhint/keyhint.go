@@ -1,25 +1,25 @@
 package keyhint
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"math"
 
-	"github.com/oakmound/oak/v3/alg/intgeom"
-	"github.com/oakmound/oak/v3/entities/x/btn"
-	"github.com/oakmound/oak/v3/entities/x/mods"
-	"github.com/oakmound/oak/v3/render"
+	"github.com/oakmound/oak/v4/alg/intgeom"
+	"github.com/oakmound/oak/v4/entities"
+	"github.com/oakmound/oak/v4/render"
+	"github.com/oakmound/oak/v4/render/mod"
 )
 
-// A KeyHint is a small, colored renderable displaying some text. The text 
+// A KeyHint is a small, colored renderable displaying some text. The text
 // is designed to be a key 'A,B,C,D' or controller button 'A,B,X,Y', and intended
-// for use as a hint to imply that pressing that key or button will trigger something. 
+// for use as a hint to imply that pressing that key or button will trigger something.
 type KeyHint struct {
 	Options
 	render.Renderable
 }
 
+// Options used to generate a keyhint
 type Options struct {
 	Key         string
 	Color       color.RGBA
@@ -49,6 +49,7 @@ func (o Options) setDefaults() Options {
 	return o
 }
 
+// Generate the keyhint from its provided options combined with defaults.
 func (o Options) Generate() *KeyHint {
 	o = o.setDefaults()
 	rgba := image.NewRGBA(image.Rect(0, 0, o.Height, o.Height))
@@ -91,13 +92,13 @@ func (o Options) Generate() *KeyHint {
 			} else if distancePercent > (float64(o.Height)-2.99)/float64(o.Height) {
 				c = o.BorderColor
 			} else if distancePercent > (float64(o.Height)-3.99)/float64(o.Height) {
-				c = mix(o.BorderColor, mods.Darker(c, .2), .80)
+				c = mix(o.BorderColor, mod.Darker(c, .2), .80)
 			} else if distancePercent > (float64(o.Height)-4.99)/float64(o.Height) {
-				c = mix(o.BorderColor, mods.Darker(c, .2), .50)
+				c = mix(o.BorderColor, mod.Darker(c, .2), .50)
 			} else if distancePercent > .85 {
-				c = mods.Darker(c, .2)
+				c = mod.Darker(c, .2)
 			} else if distancePercent > .65 {
-				c = mods.Lighter(c, distancePercent-.65)
+				c = mod.Lighter(c, distancePercent-.65)
 			}
 			rgba.Set(x, y, c)
 		}
@@ -124,8 +125,10 @@ func mix(c1, c2 color.Color, percent float64) color.Color {
 	}
 }
 
-func AlignHintToButton(kh *KeyHint, b btn.Btn) {
-	r := b.GetRenderable()
+// AlignHintToButton aligns the keyhint with the given entitry in a normalized location.
+func AlignHintToButton(kh *KeyHint, e *entities.Entity) {
+	r := e.Renderable
 	w, _ := r.GetDims()
 	kh.SetPos((r.X()+float64(w))-float64(kh.Height)*(3.0/4.0), r.Y()-(float64(kh.Height)*(1.0/4.0)))
+
 }

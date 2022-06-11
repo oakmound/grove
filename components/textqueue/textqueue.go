@@ -6,14 +6,19 @@ import (
 	"sync"
 	"time"
 
-	"github.com/oakmound/oak/v3/alg/floatgeom"
-	"github.com/oakmound/oak/v3/dlog"
-	"github.com/oakmound/oak/v3/entities/x/mods"
-	"github.com/oakmound/oak/v3/event"
-	"github.com/oakmound/oak/v3/render"
-	"github.com/oakmound/oak/v3/render/mod"
-	"github.com/oakmound/oak/v3/scene"
+	"github.com/oakmound/oak/v4/alg/floatgeom"
+	"github.com/oakmound/oak/v4/dlog"
+
+	"github.com/oakmound/oak/v4/event"
+	"github.com/oakmound/oak/v4/render"
+	"github.com/oakmound/oak/v4/render/mod"
+	"github.com/oakmound/oak/v4/scene"
 	"golang.org/x/image/colornames"
+)
+
+var (
+	// TextQueuePublish: Triggered to publish an update to a specific text queue
+	TextQueuePublish = event.RegisterEvent[string]()
 )
 
 type queueItem struct {
@@ -25,7 +30,7 @@ type queueItem struct {
 // for a brief time before fading the text and dropping it. It accepts
 // new text elements from the DisplayTextEvent event.
 type TextQueue struct {
-	event.CID
+	event.CallerID
 	render.LayeredPoint
 
 	queueLock   sync.Mutex
@@ -34,58 +39,62 @@ type TextQueue struct {
 	sustainTime time.Duration
 }
 
-func (tq *TextQueue) Init() event.CID {
-	return event.NextID(tq)
+func (tq *TextQueue) CID() event.CallerID {
+	return tq.CallerID.CID()
 }
 
 // New creates a customized TextQueue.
-func New(ctx *scene.Context, initiatingEvent string, pos floatgeom.Point2, layer int, font *render.Font, sustainTime time.Duration) *TextQueue {
+func New(ctx *scene.Context, registeredEvents []event.UnsafeEventID, pos floatgeom.Point2, layer int, font *render.Font, sustainTime time.Duration) *TextQueue {
 	tq := &TextQueue{}
-
-	tq.CID = ctx.CallerMap.NextID(tq)
+	tq.CallerID = ctx.Register(tq)
 
 	tq.LayeredPoint = render.NewLayeredPoint(pos.X(), pos.Y(), layer)
 	tq.font = font
 	tq.queue = make([]queueItem, 0)
 	tq.sustainTime = sustainTime
 
-	if initiatingEvent == "" {
-		initiatingEvent = DisplayTextEvent
+	event.Bind(ctx, TextQueuePublish, tq, PrintBind)
+
+	if len(registeredEvents) == 0 {
+		return tq
 	}
 
-	tBind := func(id event.CID, payload interface{}) int {
-		ent := ctx.CallerMap.GetEntity(id)
-		tq, ok := ent.(*TextQueue)
-		if !ok {
+	unsafePrintBind := func(id event.CallerID, handler event.Handler, payload interface{}) event.Response {
+		ent := handler.GetCallerMap().GetEntity(id)
+		_, ok := ent.(*TextQueue)
+		if !ok && ent != nil {
 			dlog.Error("expected TextQueue, got " + fmt.Sprintf("%T", ent))
 			return 1
 		}
-		str, ok := payload.(string)
-		if !ok {
-			dlog.Error("did not get string payload")
-			return 0
-		}
-		r := tq.font.NewText(str, 0, 0)
-		m := r.ToSprite().Modify(mods.HighlightOff(colornames.Black, 2, 1, 1))
-		tq.queueLock.Lock()
-		tq.queue = append([]queueItem{{
-			mod:    m,
-			dropAt: time.Now().Add(tq.sustainTime),
-		}}, tq.queue...)
-		tq.queueLock.Unlock()
+		PrintBind(tq, fmt.Sprintf("%v", payload))
+
 		return 0
 	}
 
-	ctx.EventHandler.Bind(initiatingEvent, tq.CID, tBind)
+	for _, re := range registeredEvents {
+		ctx.UnsafeBind(re, tq.CID(), unsafePrintBind)
+	}
 
 	return tq
 }
 
+func PrintBind(tq *TextQueue, str string) event.Response {
+	r := tq.font.NewText(str, 0, 0)
+	m := r.ToSprite().Modify(mod.HighlightOff(colornames.Black, 2, 1, 1))
+	tq.queueLock.Lock()
+	tq.queue = append([]queueItem{{
+		mod:    m,
+		dropAt: time.Now().Add(tq.sustainTime),
+	}}, tq.queue...)
+	tq.queueLock.Unlock()
+	return 0
+}
+
 const DisplayTextEvent = "DisplayText"
-const RecreationNeeded = "RecreationNeeded"
 
 const yBuffer = 3
 
+// Draw the textqueue's contents
 func (tq *TextQueue) Draw(buff draw.Image, xOff, yOff float64) {
 	if len(tq.queue) == 0 {
 		return
@@ -111,12 +120,7 @@ func (tq *TextQueue) Draw(buff draw.Image, xOff, yOff float64) {
 	}
 }
 
+// GetDims needs to have some size so give it the minimal one.
 func (tq *TextQueue) GetDims() (int, int) {
 	return 1, 1
-}
-
-func DisplayError(err error) {
-	if err != nil {
-		event.Trigger(DisplayTextEvent, err.Error())
-	}
 }
