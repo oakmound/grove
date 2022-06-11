@@ -11,6 +11,7 @@ import (
 // Option for configuring a TextInput
 type Option func(*TextInput)
 
+// And together the options
 func And(opts ...Option) Option {
 	return func(t *TextInput) {
 		for _, opt := range opts {
@@ -19,6 +20,7 @@ func And(opts ...Option) Option {
 	}
 }
 
+// WithStr sets the str as the text on the textinput
 func WithStr(s string) Option {
 	return func(t *TextInput) {
 		t.currentText = &s
@@ -40,7 +42,7 @@ func WithPlaceholder(s string) Option {
 	}
 }
 
-func WithPos(x, y float64) Option {
+func WithPosition(x, y float64) Option {
 	return func(t *TextInput) {
 		t.x = x
 		t.y = y

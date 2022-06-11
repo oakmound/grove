@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 	"os"
 	"time"
 
@@ -9,12 +10,15 @@ import (
 	"github.com/oakmound/grove/components/keyhint"
 	"github.com/oakmound/grove/components/sound"
 	"github.com/oakmound/grove/components/textfit"
+	"github.com/oakmound/grove/components/textinput"
 	"github.com/oakmound/grove/components/textqueue"
 	"golang.org/x/image/colornames"
 
 	"github.com/oakmound/oak/v4"
 	"github.com/oakmound/oak/v4/alg/floatgeom"
 	"github.com/oakmound/oak/v4/audio"
+	"github.com/oakmound/oak/v4/collision"
+	"github.com/oakmound/oak/v4/debugtools"
 	"github.com/oakmound/oak/v4/entities"
 	"github.com/oakmound/oak/v4/event"
 	"github.com/oakmound/oak/v4/key"
@@ -32,7 +36,9 @@ func main() {
 	oak.AddScene("demo", scene.Scene{Start: func(ctx *scene.Context) {
 
 		render.Draw(render.NewDrawFPS(0.03, nil, 10, 10))
-
+		render.Draw(debugtools.NewThickRTree(ctx, ctx.CollisionTree, 5), 2, 3)
+		render.Draw(debugtools.NewThickColoredRTree(ctx, ctx.MouseTree, 5,
+			map[collision.Label]color.RGBA{collision.Label(0): {200, 100, 100, 255}}), 2, 3)
 		basePosI := ctx.Window.Bounds().DivConst(2)
 		basePos := floatgeom.Point2{float64(basePosI.X()), float64(basePosI.Y())}
 		err := audio.InitDefault()
@@ -44,7 +50,7 @@ func main() {
 		mainBar := sound.NewBar(ctx, sound.KindMaster, basePos, 100, 40)
 		ctx.Draw(mainBar.Renderable)
 
-		event.Bind(ctx, mouse.Click, mainBar, func(bar *entities.Entity, me *mouse.Event) event.Response {
+		event.Bind(ctx, mouse.PressOn, mainBar, func(bar *entities.Entity, me *mouse.Event) event.Response {
 			sound.SetMasterVolume(ctx, solidProgress(bar, *me))
 			return 0
 		})
@@ -63,7 +69,7 @@ func main() {
 		kFnt, _ := render.DefFontGenerator.RegenerateWith(
 			fonthelper.WithSizeAndColor(15, colornames.Orange))
 		keyQueue := textqueue.New(
-			ctx, []event.UnsafeEventID{key.AnyDown.UnsafeEventID},
+			ctx, []event.UnsafeEventID{key.AnyDown.UnsafeEventID, mouse.Press.UnsafeEventID},
 			floatgeom.Point2{50, 50}, 0,
 			kFnt, 4*time.Second,
 		)
@@ -87,12 +93,18 @@ func main() {
 			textfit.MaxSize(22),
 		)
 
-		fmt.Printf("%v, %v", wrappedText, err)
-
 		entities.New(ctx,
 			entities.WithPosition(floatgeom.Point2{basePos.X(), 0}),
 			entities.WithRenderable(wrappedText),
 			entities.WithDrawLayers([]int{1, 2}),
+		)
+
+		textinput.New(ctx,
+			textinput.WithPosition(basePos.X(), basePos.Y()+100),
+			textinput.WithDims(200, 22),
+			textinput.WithStr("Input example"),
+			textinput.WithFont(wrapFnt),
+			textinput.WithBlinkRate(time.Second),
 		)
 
 	}})

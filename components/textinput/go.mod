@@ -1,11 +1,8 @@
 module github.com/oakmound/grove/components/textinput
 
-go 1.17
+go 1.18
 
-require (
-	github.com/oakmound/oak/v3 v3.4.0
-	github.com/oakmound/oak/v4 v4.0.0-alpha.2
-)
+require github.com/oakmound/oak/v4 v4.0.1
 
 require (
 	github.com/disintegration/gift v1.2.1 // indirect
