@@ -7,8 +7,8 @@ github.com/jfreymuth/pulse v0.1.0 h1:KN38/9hoF9PJvP5DpEVhMRKNuwnJUonc8c9ARorRXUA
 github.com/jfreymuth/pulse v0.1.0/go.mod h1:cpYspI6YljhkUf1WLXLLDmeaaPFc3CnGLjDZf9dZ4no=
 github.com/oakmound/alsa v0.0.2 h1:JbOUckkJqVvhABth7qy2JgAjqsWuBPggyoYOk1L6eK0=
 github.com/oakmound/alsa v0.0.2/go.mod h1:wx+ehwqFnNL7foTwxxu2bKQlaUmD2oXd4ka1UBSgWAo=
-github.com/oakmound/oak/v4 v4.0.0-alpha.2 h1:+24UrKUJImFa4vgKD/KUk0qOO3oTN/7i++MotNx0Ilk=
-github.com/oakmound/oak/v4 v4.0.0-alpha.2/go.mod h1:SNNyWE99yZ7Ba4HqOLUSC8QoMaTk4L0OD4N+TPxucRQ=
+github.com/oakmound/oak/v4 v4.0.0 h1:wnuX7nt3PjPs3V2ZT64T4wyAQF8e0D5CVElI33EDsTY=
+github.com/oakmound/oak/v4 v4.0.0/go.mod h1:cRP/m5P4ptLwx9NgD11HwLyCWEUCBC6tu7hHRh3/kUM=
 github.com/oov/directsound-go v0.0.0-20141101201356-e53e59c700bf h1:od9gEl9UQ/QNHlgYlgsSaC5SZ+CGbvO2/PCIgserJc0=
 github.com/oov/directsound-go v0.0.0-20141101201356-e53e59c700bf/go.mod h1:RBXkZ8n2vvtdJP6PO+TbU/N/DVuCDwUN53CU+C1pJOs=
 github.com/yuin/goldmark v1.4.0/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=

@@ -3,7 +3,7 @@ module github.com/oakmound/grove/examples/svg
 go 1.18
 
 require (
-	github.com/oakmound/oak/v4 v4.0.0
+	github.com/oakmound/oak/v4 v4.0.1
 	github.com/srwiley/oksvg v0.0.0-20210320200257-875f767ac39a
 	github.com/srwiley/rasterx v0.0.0-20200120212402-85cb7272f5e9
 )

@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/oakmound/grove/components/radar v0.0.0-20220111021726-41ed3856c8b7
-	github.com/oakmound/oak/v4 v4.0.0
+	github.com/oakmound/oak/v4 v4.0.1
 )
 
 require (

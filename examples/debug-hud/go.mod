@@ -9,7 +9,7 @@ require (
 	github.com/oakmound/grove/components/textfit v0.0.0-20220111021726-41ed3856c8b7
 	github.com/oakmound/grove/components/textinput v0.0.0-20220111021726-41ed3856c8b7
 	github.com/oakmound/grove/components/textqueue v0.0.0-20220111021726-41ed3856c8b7
-	github.com/oakmound/oak/v4 v4.0.0
+	github.com/oakmound/oak/v4 v4.0.1
 	golang.org/x/image v0.0.0-20220413100746-70e8d0d3baa9
 )
 
