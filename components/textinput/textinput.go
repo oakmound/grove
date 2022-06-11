@@ -5,7 +5,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/oakmound/oak/v3/timing"
 	"github.com/oakmound/oak/v4/alg/floatgeom"
 	"github.com/oakmound/oak/v4/entities"
 	"github.com/oakmound/oak/v4/event"
@@ -13,6 +12,7 @@ import (
 	"github.com/oakmound/oak/v4/mouse"
 	"github.com/oakmound/oak/v4/render"
 	"github.com/oakmound/oak/v4/scene"
+	"github.com/oakmound/oak/v4/timing"
 )
 
 // TextInput provides a nicer way to handle input of text
